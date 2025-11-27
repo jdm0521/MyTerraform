@@ -118,10 +118,11 @@ resource "azurerm_linux_virtual_machine" "jdm-vm" {
     storage_account_type = "Standard_LRS"
   }
 
-    source_image_reference {
+  #What the current image was at the time. If want to change use the az vm image list command for west europe. 
+  source_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
-    sku       = "22.04-lts"
-    version   = "latest"
+    sku       = "16.04-lts"
+     version = "16.04.202109281"
   }
 } 
