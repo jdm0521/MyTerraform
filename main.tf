@@ -96,3 +96,4 @@ resource "azurerm_network_interface" "jdm-nic" {
 
   tags = { environment = "dev" }
 }
+
