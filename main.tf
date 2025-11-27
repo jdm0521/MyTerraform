@@ -96,3 +96,32 @@ resource "azurerm_network_interface" "jdm-nic" {
 
   tags = { environment = "dev" }
 }
+
+#Linux Vm
+resource "azurerm_linux_virtual_machine" "jdm-vm" {
+  name                = "jdm-vm"
+  resource_group_name = azurerm_resource_group.jdm-rg.name
+  location            = azurerm_resource_group.jdm-rg.location
+  size                = "Standard_B1s"
+  admin_username      = "adminuser"
+  network_interface_ids = [
+    azurerm_network_interface.jdm-nic.id,
+  ]
+
+  admin_ssh_key {
+    username   = "adminuser"
+    public_key = file("~/.ssh/jdmazurekey.pub")
+  }
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+
+    source_image_reference {
+    publisher = "Canonical"
+    offer     = "UbuntuServer"
+    sku       = "22.04-lts"
+    version   = "latest"
+  }
+} 
