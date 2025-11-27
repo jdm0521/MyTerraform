@@ -108,6 +108,8 @@ resource "azurerm_linux_virtual_machine" "jdm-vm" {
     azurerm_network_interface.jdm-nic.id,
   ]
 
+  custom_data = filebase64("customdata.tpl")
+
   admin_ssh_key {
     username   = "adminuser"
     public_key = file("~/.ssh/jdmazurekey.pub")
@@ -123,6 +125,6 @@ resource "azurerm_linux_virtual_machine" "jdm-vm" {
     publisher = "Canonical"
     offer     = "UbuntuServer"
     sku       = "16.04-lts"
-     version = "16.04.202109281"
+    version   = "16.04.202109281"
   }
-} 
+}
