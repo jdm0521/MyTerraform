@@ -80,3 +80,19 @@ resource "azurerm_public_ip" "jdm-ip" {
     environment = "dev"
   }
 }
+
+#NIC Card
+resource "azurerm_network_interface" "jdm-nic" {
+  name                = "jdm-nic"
+  location            = azurerm_resource_group.jdm-rg.location
+  resource_group_name = azurerm_resource_group.jdm-rg.name
+
+  ip_configuration {
+    name                          = "internal"
+    subnet_id                     = azurerm_subnet.jdm-subnet.id
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.jdm-ip.id
+  }
+
+  tags = { environment = "dev" }
+}
