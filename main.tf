@@ -42,11 +42,11 @@ resource "azurerm_subnet" "jdm-subnet" {
 }
 
 resource "azurerm_network_security_group" "jdm-sg" {
-  name = "jdm-sg"
-  location = azurerm_resource_group.jdm-rg.location
+  name                = "jdm-sg"
+  location            = azurerm_resource_group.jdm-rg.location
   resource_group_name = azurerm_resource_group.jdm-rg.name
 
-  tags = { environment = "dev"  }
+  tags = { environment = "dev" }
 }
 
 resource "azurerm_network_security_rule" "jdm-dev-rule" {
@@ -63,3 +63,8 @@ resource "azurerm_network_security_rule" "jdm-dev-rule" {
   network_security_group_name = azurerm_network_security_group.jdm-sg.name
 }
 
+#Asscoiate subnet with security group
+resource "azurerm_subnet_network_security_group_association" "jdm-sga" {
+  subnet_id                 = azurerm_subnet.jdm-subnet.id
+  network_security_group_id = azurerm_network_security_group.jdm-sg.id
+}
