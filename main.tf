@@ -68,3 +68,15 @@ resource "azurerm_subnet_network_security_group_association" "jdm-sga" {
   subnet_id                 = azurerm_subnet.jdm-subnet.id
   network_security_group_id = azurerm_network_security_group.jdm-sg.id
 }
+
+#Public IP
+resource "azurerm_public_ip" "jdm-ip" {
+  name                = "jdm-ip"
+  resource_group_name = azurerm_resource_group.jdm-rg.name
+  location            = azurerm_resource_group.jdm-rg.location
+  allocation_method   = "Dynamic"
+
+  tags = {
+    environment = "dev"
+  }
+}
