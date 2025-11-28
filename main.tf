@@ -139,3 +139,8 @@ resource "azurerm_linux_virtual_machine" "jdm-vm" {
 
   tags = { environment = "dev" }
 }
+
+data "azurerm_public_ip" "jdm-ip-data" {
+    name = azurerm_public_ip.jdm-ip.name
+    resource_group_name = azurerm_resource_group.jdm-rg.name 
+}
