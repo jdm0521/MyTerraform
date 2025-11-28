@@ -129,12 +129,12 @@ resource "azurerm_linux_virtual_machine" "jdm-vm" {
   }
 
    provisioner "local-exec" {
-     command = templatefile("windows-ssh-script.tpl", {
+     command = templatefile("${var.host_os}--ssh-script.tpl", {
       hostname = self.public_ip_address,
       user = "adminuser",
       identityfile = "~/.ssh/jdmazurekey"
      })
-     interpreter = [ "Powershell", "-Command" ]
+     interpreter = var.host_os == "windows" ? ["Powershell", "-Command"] : ["bash", "-c"]
    }
 
   tags = { environment = "dev" }
@@ -146,6 +146,7 @@ data "azurerm_public_ip" "jdm-ip-data" {
     resource_group_name = azurerm_resource_group.jdm-rg.name 
 }
 
+#This is an Output used to show public IP address 
 output "public_ip_address" {
   value = "${azurerm_linux_virtual_machine.jdm-vm.name}: ${data.azurerm_public_ip.jdm-ip-data.ip_address} "
 }

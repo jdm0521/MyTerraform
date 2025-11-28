@@ -1,0 +1,40 @@
+name: "Terraform - PR Plan"
+
+on:
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    env:
+      TF_WORKING_DIR: "./"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 2.91.0
+
+      - name: Terraform Init
+        run: |
+          cd $TF_WORKING_DIR
+          terraform init -input=false
+
+      - name: Terraform Format
+        run: |
+          cd $TF_WORKING_DIR
+          terraform fmt -check
+
+      - name: Terraform Validate
+        run: |
+          cd $TF_WORKING_DIR
+          terraform validate
+
+      - name: Terraform Plan
+        run: |
+          cd $TF_WORKING_DIR
+          terraform plan -input=false

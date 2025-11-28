@@ -1,0 +1,41 @@
+name: Terraform Apply to Azure
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    env:
+      TF_WORKING_DIR: "./"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to Azure with OIDC
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 2.91.0
+
+      - name: Terraform Init
+        run: |
+          cd $TF_WORKING_DIR
+          terraform init -input=false
+
+      - name: Terraform Apply
+        run: |
+          cd $TF_WORKING_DIR
+          terraform apply -auto-approve -input=false
