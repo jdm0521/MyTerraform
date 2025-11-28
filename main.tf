@@ -140,7 +140,12 @@ resource "azurerm_linux_virtual_machine" "jdm-vm" {
   tags = { environment = "dev" }
 }
 
+#Added a data to grab the public ip address that matches the name and resource_group_name
 data "azurerm_public_ip" "jdm-ip-data" {
     name = azurerm_public_ip.jdm-ip.name
     resource_group_name = azurerm_resource_group.jdm-rg.name 
+}
+
+output "public_ip_address" {
+  value = "${azurerm_linux_virtual_machine.jdm-vm.name}: ${data.azurerm_public_ip.jdm-ip-data.ip_address} "
 }
