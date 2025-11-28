@@ -127,4 +127,15 @@ resource "azurerm_linux_virtual_machine" "jdm-vm" {
     sku       = "16.04-lts"
     version   = "16.04.202109281"
   }
+
+   provisioner "local-exec" {
+     command = templatefile("windows-ssh-script.tpl", {
+      hostname = self.public_ip_address,
+      user = "adminuser",
+      identityfile = "~/.ssh/jdmazurekey"
+     })
+     interpreter = [ "Powershell", "-Command" ]
+   }
+
+  tags = { environment = "dev" }
 }
