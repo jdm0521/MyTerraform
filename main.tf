@@ -74,7 +74,8 @@ resource "azurerm_public_ip" "jdm-ip" {
   name                = "jdm-ip"
   resource_group_name = azurerm_resource_group.jdm-rg.name
   location            = azurerm_resource_group.jdm-rg.location
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
+  sku = "Standard"
 
   tags = {
     environment = "dev"
