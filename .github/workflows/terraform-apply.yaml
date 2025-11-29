@@ -35,6 +35,16 @@ jobs:
           cd $TF_WORKING_DIR
           terraform init -input=false
 
+      - name: Setup SSH Key
+        run: |
+            mkdir -p ~/.ssh
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/jdmazurekey
+            chmod 600 ~/.ssh/jdmazurekey
+
+      - name: Generate Public Key
+        run: |
+            ssh-keygen -y -f ~/.ssh/jdmazurekey > ~/.ssh/jdmazurekey.pub
+    
       - name: Terraform Apply
         run: |
           cd $TF_WORKING_DIR

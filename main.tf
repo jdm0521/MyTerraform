@@ -111,10 +111,10 @@ resource "azurerm_linux_virtual_machine" "jdm-vm" {
 
   custom_data = filebase64("customdata.tpl")
 
-  #admin_ssh_key {
-  #username   = "adminuser"
-  #public_key = file("~/.ssh/jdmazurekey.pub")
-  #}
+  admin_ssh_key {
+  username   = "adminuser"
+  public_key = file("~/.ssh/jdmazurekey.pub")
+  }
 
   os_disk {
     caching              = "ReadWrite"
