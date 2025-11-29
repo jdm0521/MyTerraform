@@ -13,7 +13,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "jdm-rg" {
-  name     = "jdm-terra-resources"
+  name     = "jdm-terra-resources-new"
   location = "West Europe"
   tags = {
     environment = "dev"
@@ -75,7 +75,7 @@ resource "azurerm_public_ip" "jdm-ip" {
   resource_group_name = azurerm_resource_group.jdm-rg.name
   location            = azurerm_resource_group.jdm-rg.location
   allocation_method   = "Static"
-  sku = "Standard"
+  sku                 = "Standard"
 
   tags = {
     environment = "dev"
@@ -112,8 +112,8 @@ resource "azurerm_linux_virtual_machine" "jdm-vm" {
   custom_data = filebase64("customdata.tpl")
 
   #admin_ssh_key {
-    #username   = "adminuser"
-    #public_key = file("~/.ssh/jdmazurekey.pub")
+  #username   = "adminuser"
+  #public_key = file("~/.ssh/jdmazurekey.pub")
   #}
 
   os_disk {
@@ -129,22 +129,22 @@ resource "azurerm_linux_virtual_machine" "jdm-vm" {
     version   = "16.04.202109281"
   }
 
-   provisioner "local-exec" {
-     command = templatefile("${var.host_os}--ssh-script.tpl", {
+  provisioner "local-exec" {
+    command = templatefile("${var.host_os}--ssh-script.tpl", {
       hostname = self.public_ip_address,
-      user = "adminuser",
+      user     = "adminuser",
       #identityfile = "~/.ssh/jdmazurekey"
-     })
-     interpreter = var.host_os == "windows" ? ["Powershell", "-Command"] : ["bash", "-c"]
-   }
+    })
+    interpreter = var.host_os == "windows" ? ["Powershell", "-Command"] : ["bash", "-c"]
+  }
 
   tags = { environment = "dev" }
 }
 
 #Added a data to grab the public ip address that matches the name and resource_group_name
 data "azurerm_public_ip" "jdm-ip-data" {
-    name = azurerm_public_ip.jdm-ip.name
-    resource_group_name = azurerm_resource_group.jdm-rg.name 
+  name                = azurerm_public_ip.jdm-ip.name
+  resource_group_name = azurerm_resource_group.jdm-rg.name
 }
 
 #This is an Output used to show public IP address 
