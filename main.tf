@@ -130,7 +130,7 @@ resource "azurerm_linux_virtual_machine" "jdm-vm" {
   }
 
   provisioner "local-exec" {
-    command = templatefile("${var.host_os}--ssh-script.tpl", {
+    command = templatefile("${var.host_os}-ssh-script.tpl", {
       hostname = self.public_ip_address,
       user     = "adminuser",
       #identityfile = "~/.ssh/jdmazurekey"
