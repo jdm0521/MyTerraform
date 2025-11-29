@@ -110,10 +110,10 @@ resource "azurerm_linux_virtual_machine" "jdm-vm" {
 
   custom_data = filebase64("customdata.tpl")
 
-  admin_ssh_key {
-    username   = "adminuser"
-    public_key = file("~/.ssh/jdmazurekey.pub")
-  }
+  #admin_ssh_key {
+    #username   = "adminuser"
+    #public_key = file("~/.ssh/jdmazurekey.pub")
+  #}
 
   os_disk {
     caching              = "ReadWrite"
@@ -132,7 +132,7 @@ resource "azurerm_linux_virtual_machine" "jdm-vm" {
      command = templatefile("${var.host_os}--ssh-script.tpl", {
       hostname = self.public_ip_address,
       user = "adminuser",
-      identityfile = "~/.ssh/jdmazurekey"
+      #identityfile = "~/.ssh/jdmazurekey"
      })
      interpreter = var.host_os == "windows" ? ["Powershell", "-Command"] : ["bash", "-c"]
    }
