@@ -139,6 +139,15 @@ resource "azurerm_linux_virtual_machine" "jdm-vm" {
   }
 
   tags = { environment = "dev" }
+
+lifecycle {
+ignore_changes = [
+custom_data,
+admin_ssh_key,
+# optionally os_disk if you want Terraform to ignore disk differences
+# os_disk,
+]
+}
 }
 
 #Added a data to grab the public ip address that matches the name and resource_group_name
